@@ -84,6 +84,21 @@ export async function listConcerts(userId: string): Promise<ConcertListItem[]> {
   return (data ?? []) as unknown as ConcertListItem[]
 }
 
+/** Another user's attended shows — readable when their profile is public
+ *  (concerts_read RLS). Used for public profiles and mutual-show checks. */
+export async function listPublicAttendedConcerts(
+  userId: string,
+): Promise<ConcertListItem[]> {
+  const { data, error } = await supabase
+    .from('concerts')
+    .select(LIST_SELECT)
+    .eq('user_id', userId)
+    .eq('status', 'attended')
+    .order('date', { ascending: false })
+  if (error) throw error
+  return (data ?? []) as unknown as ConcertListItem[]
+}
+
 export async function getConcert(id: string): Promise<ConcertDetail> {
   const { data, error } = await supabase
     .from('concerts')

@@ -5,6 +5,7 @@ import { Spinner } from '@/components/ui/Spinner'
 import { AvatarTile, gradientFor } from '@/components/ui/AvatarTile'
 import { SetlistTab } from '../components/SetlistTab'
 import { PhotosTab } from '../components/PhotosTab'
+import { BuddiesTab } from '@/features/social/components/BuddiesTab'
 import { useConcert } from '../hooks/useConcerts'
 import { useDeleteConcert } from '../hooks/useConcertMutations'
 import { formatConcertDate } from '@/lib/utils/dates'
@@ -162,7 +163,7 @@ export function ConcertDetail() {
           <SetlistTab concertId={data.id} syncedFromSetlistFm={!!data.setlist_fm_id} />
         )}
         {tab === 'Photos' && <PhotosTab data={data} />}
-        {tab === 'People' && <Placeholder text="Concert buddies arrive in Sprint 6." />}
+        {tab === 'People' && <BuddiesTab concertId={data.id} ownerId={data.user_id} />}
       </div>
 
       <div className="px-6">

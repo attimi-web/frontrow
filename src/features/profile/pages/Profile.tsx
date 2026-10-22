@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import { AvatarTile } from '@/components/ui/AvatarTile'
 import { useProfile } from '@/features/auth/hooks/useProfile'
@@ -6,6 +7,7 @@ import { signOut } from '@/features/auth/api/auth'
 import { useConcerts } from '@/features/concerts/hooks/useConcerts'
 import { ConcertCard } from '@/features/concerts/components/ConcertCard'
 import { getConcertStats, groupConcertsByYear } from '@/features/concerts/utils'
+import { useDerivedFriends } from '@/features/social/hooks'
 import { toast } from '@/stores/useUIStore'
 import { cn } from '@/lib/utils/cn'
 
@@ -148,11 +150,7 @@ export function Profile() {
             Detailed stats arrive in Sprint 7.
           </p>
         )}
-        {tab === 'Friends' && (
-          <p className="py-8 text-center font-body text-sm text-fg-subtle">
-            Friends arrive in Sprint 6.
-          </p>
-        )}
+        {tab === 'Friends' && <FriendsTab />}
       </div>
     </div>
   )
@@ -173,6 +171,49 @@ function ProfileStat({
       <p className="mt-0.5 font-body text-[10px] uppercase tracking-[0.04em] text-fg-disabled">
         {label}
       </p>
+    </div>
+  )
+}
+
+function FriendsTab() {
+  const { friends, incoming } = useDerivedFriends()
+  return (
+    <div>
+      <Link
+        to="/friends"
+        className="flex h-11 items-center justify-center gap-2 rounded-xl bg-orange font-display text-sm font-bold text-white"
+      >
+        + Find friends
+        {incoming.length > 0 && (
+          <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-white/25 px-1.5 text-xs">
+            {incoming.length}
+          </span>
+        )}
+      </Link>
+
+      {friends.length === 0 ? (
+        <p className="py-8 text-center font-body text-sm text-fg-subtle">
+          No friends yet — find people you’ve seen shows with.
+        </p>
+      ) : (
+        <div className="mt-4 space-y-2">
+          {friends.map(({ user }) => (
+            <Link
+              key={user.id}
+              to={`/u/${user.username}`}
+              className="flex items-center gap-3 rounded-2xl border border-border bg-white/[0.03] p-3"
+            >
+              <AvatarTile name={user.display_name || user.username} size={40} radius={11} />
+              <div className="min-w-0">
+                <p className="truncate font-display text-sm font-bold text-fg">
+                  {user.display_name || user.username}
+                </p>
+                <p className="truncate font-body text-xs text-fg-faint">@{user.username}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
