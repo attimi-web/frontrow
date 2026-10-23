@@ -1,44 +1,227 @@
 import { useMemo } from 'react'
-import { cn } from '@/lib/utils/cn'
 import { useConcerts } from '@/features/concerts/hooks/useConcerts'
-import { getConcertStats } from '@/features/concerts/utils'
+import { BarChart, type BarDatum } from '../components/BarChart'
+import {
+  summaryStats,
+  showsPerYear,
+  topArtists,
+  countriesVisited,
+  spendingPerYear,
+  totalSpent,
+  formatCompactMoney,
+  formatMoney,
+} from '../stats'
+
+const SECTION =
+  'rounded-2xl border border-border bg-white/[0.03] p-4'
+const SECTION_LABEL =
+  'font-body text-[11px] font-semibold uppercase tracking-[0.08em] text-fg-disabled'
 
 export function Stats() {
-  const { data: concerts } = useConcerts()
-  const stats = useMemo(() => getConcertStats(concerts ?? []), [concerts])
+  const { data: concerts, isLoading } = useConcerts()
+  const list = useMemo(() => concerts ?? [], [concerts])
 
-  const items = [
-    { value: stats.shows, label: 'Shows' },
-    { value: stats.artists, label: 'Artists' },
-    { value: stats.venues, label: 'Venues' },
-    { value: stats.countries, label: 'Countries' },
-  ]
+  const summary = useMemo(() => summaryStats(list), [list])
+  const years = useMemo(() => fillYears(showsPerYear(list), 7), [list])
+  const artists = useMemo(() => topArtists(list, 5), [list])
+  const countries = useMemo(() => countriesVisited(list, 5), [list])
+  const spendYears = useMemo(() => spendingPerYear(list), [list])
+  const spent = useMemo(() => totalSpent(list), [list])
+
+  const hasShows = summary.shows > 0
 
   return (
-    <div className="px-6 pt-4">
-      <h1 className="font-display text-[32px] font-extrabold tracking-[-0.6px] text-fg">Stats</h1>
-
-      <div className="mt-6 flex overflow-hidden rounded-2xl border border-border bg-white/[0.03]">
-        {items.map((s, i) => (
-          <div
-            key={s.label}
-            className={cn('flex-1 px-2 py-4 text-center', i < items.length - 1 && 'border-r border-border')}
-          >
-            <p className="font-display text-2xl font-extrabold tracking-[-0.5px] text-orange">
-              {s.value}
-            </p>
-            <p className="mt-1 font-body text-[10px] uppercase tracking-[0.04em] text-fg-disabled">
-              {s.label}
-            </p>
-          </div>
-        ))}
+    <div className="px-6 pt-4 pb-6">
+      <div className="flex items-center justify-between">
+        <h1 className="font-display text-2xl font-extrabold tracking-[-0.5px] text-fg">
+          Stats
+        </h1>
+        <div className="flex h-[34px] items-center gap-1.5 rounded-[10px] border border-border-strong bg-white/5 px-3.5">
+          <span className="font-body text-[13px] text-fg-muted">All time</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 9l6 6 6-6" stroke="#6a6882" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+        </div>
       </div>
 
-      <div className="mt-8 rounded-2xl border border-dashed border-border-strong p-8 text-center">
-        <p className="font-body text-sm text-fg-subtle">
-          Charts, top artists, and Year Wrapped arrive in Sprint 7.
-        </p>
+      {/* Summary cards */}
+      <div className="mt-3.5 grid grid-cols-3 gap-2">
+        <SummaryCard value={String(summary.shows)} label="Shows" />
+        <SummaryCard value={String(summary.countries)} label="Countries" />
+        <SummaryCard
+          value={spent.amount > 0 ? formatCompactMoney(spent) : '—'}
+          label="Spent"
+        />
       </div>
+
+      {!hasShows ? (
+        <div className="mt-8 rounded-2xl border border-dashed border-border-strong p-8 text-center">
+          <p className="font-body text-sm text-fg-subtle">
+            {isLoading
+              ? 'Loading your stats…'
+              : 'Log a few shows and your stats will appear here.'}
+          </p>
+        </div>
+      ) : (
+        <>
+          {/* Shows per year */}
+          <section className={`mt-5 ${SECTION}`}>
+            <p className={`${SECTION_LABEL} mb-4`}>Shows per year</p>
+            <BarChart data={years} />
+          </section>
+
+          {/* Top artists */}
+          {artists.length > 0 && (
+            <section className={`mt-3 ${SECTION}`}>
+              <p className={`${SECTION_LABEL} mb-3.5`}>Top artists</p>
+              <div className="flex flex-col gap-[11px]">
+                {artists.map((a, i) => {
+                  const max = artists[0].count
+                  const pct = Math.round((a.count / max) * 100)
+                  return (
+                    <div key={a.name} className="flex items-center gap-2.5">
+                      <span className="w-[110px] flex-none truncate font-body text-xs text-fg-subtle">
+                        {a.name}
+                      </span>
+                      <div className="h-1.5 flex-1 overflow-hidden rounded-[3px] bg-white/[0.06]">
+                        <div
+                          className="h-full rounded-[3px]"
+                          style={{
+                            width: `${pct}%`,
+                            background:
+                              i === 0
+                                ? 'var(--color-orange)'
+                                : `rgba(232,117,42,${(0.65 - i * 0.12).toFixed(2)})`,
+                            boxShadow:
+                              i === 0 ? '0 0 8px rgba(232,117,42,0.4)' : undefined,
+                          }}
+                        />
+                      </div>
+                      <span
+                        className={`w-5 flex-none text-right font-display text-xs font-bold ${
+                          i === 0 ? 'text-orange' : 'text-fg-muted'
+                        }`}
+                      >
+                        {a.count}
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+            </section>
+          )}
+
+          {/* Countries visited */}
+          {countries.length > 0 && (
+            <section className={`mt-3 ${SECTION}`}>
+              <p className={`${SECTION_LABEL} mb-3.5`}>Countries visited</p>
+              <div className="flex flex-col gap-2.5">
+                {countries.map((c) => (
+                  <div key={c.country} className="flex items-center justify-between">
+                    <span className="font-body text-[13px] text-fg-muted">{c.country}</span>
+                    <span className="font-display text-[13px] font-bold text-fg">{c.count}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Money spent */}
+          {spent.amount > 0 && (
+            <section className={`mt-3 ${SECTION}`}>
+              <div className="mb-3.5 flex items-center justify-between">
+                <p className={SECTION_LABEL}>Money spent</p>
+                <p className="font-display text-sm font-extrabold text-orange">
+                  {formatMoney(spent)} total
+                </p>
+              </div>
+              <MoneyAreaChart data={spendYears} />
+            </section>
+          )}
+        </>
+      )}
     </div>
   )
+}
+
+function SummaryCard({ value, label }: { value: string; label: string }) {
+  return (
+    <div className="rounded-[14px] border border-border bg-white/[0.03] p-3 text-center">
+      <p className="font-display text-[22px] font-extrabold tracking-[-0.8px] text-orange">
+        {value}
+      </p>
+      <p className="mt-0.5 font-body text-[10px] uppercase tracking-[0.04em] text-fg-disabled">
+        {label}
+      </p>
+    </div>
+  )
+}
+
+/** Area chart for spend over time (screen 11), normalised into a 320×60 viewBox. */
+function MoneyAreaChart({ data }: { data: { year: string; amount: number }[] }) {
+  const W = 320
+  const H = 60
+  const pts = data.length
+    ? data
+    : [{ year: '', amount: 0 }]
+  const max = Math.max(1, ...pts.map((p) => p.amount))
+
+  const coords = pts.map((p, i) => {
+    const x = pts.length === 1 ? W : (i / (pts.length - 1)) * W
+    const y = H - 4 - (p.amount / max) * (H - 8)
+    return { x, y }
+  })
+
+  const line = coords.map((c, i) => `${i === 0 ? 'M' : 'L'}${c.x.toFixed(0)},${c.y.toFixed(0)}`).join(' ')
+  const area = `${line} L${W},${H} L${coords[0].x.toFixed(0)},${H} Z`
+  const last = coords[coords.length - 1]
+  const firstYear = pts[0]?.year
+  const lastYear = pts[pts.length - 1]?.year
+
+  return (
+    <div>
+      <svg width="100%" height="60" viewBox="0 0 320 60" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="g_money" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#e8752a" stopOpacity="0.25" />
+            <stop offset="100%" stopColor="#e8752a" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <path d={area} fill="url(#g_money)" />
+        <path
+          d={line}
+          stroke="#e8752a"
+          strokeWidth="2"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          vectorEffect="non-scaling-stroke"
+        />
+        <circle cx={last.x} cy={last.y} r="3" fill="#e8752a" />
+      </svg>
+      {data.length > 1 && (
+        <div className="mt-1 flex justify-between">
+          <span className="font-body text-[9px] text-fg-disabled">{`'${firstYear?.slice(2)}`}</span>
+          <span className="font-body text-[9px] font-semibold text-orange">{`'${lastYear?.slice(2)}`}</span>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/**
+ * Fill year gaps so the bar chart shows consecutive years (zero-years get a
+ * stub bar, like the prototype), then keep the most recent `count` years.
+ */
+function fillYears(data: { year: string; count: number }[], count: number): BarDatum[] {
+  if (data.length === 0) return []
+  const first = Number(data[0].year)
+  const last = Number(data[data.length - 1].year)
+  const byYear = new Map(data.map((d) => [d.year, d.count]))
+  const full: BarDatum[] = []
+  for (let y = first; y <= last; y++) {
+    const year = String(y)
+    full.push({ label: `'${year.slice(2)}`, value: byYear.get(year) ?? 0 })
+  }
+  return full.slice(-count)
 }

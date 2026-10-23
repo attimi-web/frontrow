@@ -14,6 +14,8 @@ export interface ConcertListItem {
   type: 'concert' | 'festival'
   status: 'attended' | 'planned' | 'wishlist'
   festival_name: string | null
+  ticket_price_paid: number | null
+  ticket_currency: string | null
   headliner: { name: string; image_url: string | null } | null
   venue: { name: string; city: string; country_name: string } | null
 }
@@ -72,7 +74,7 @@ export interface ConcertDetail extends ConcertListItem {
 }
 
 const LIST_SELECT =
-  'id, date, type, status, festival_name, headliner:artists!concerts_headliner_id_fkey(name, image_url), venue:venues!concerts_venue_id_fkey(name, city, country_name)'
+  'id, date, type, status, festival_name, ticket_price_paid, ticket_currency, headliner:artists!concerts_headliner_id_fkey(name, image_url), venue:venues!concerts_venue_id_fkey(name, city, country_name)'
 
 export async function listConcerts(userId: string): Promise<ConcertListItem[]> {
   const { data, error } = await supabase

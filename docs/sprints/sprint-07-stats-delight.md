@@ -79,10 +79,22 @@ Shareable Card dello Sprint 10, per ora può essere placeholder/screenshot).
 ---
 
 ## Checklist chiusura sprint
-- [ ] Step 1 data layer
-- [ ] Step 2 Stats Dashboard
+- [x] Step 1 data layer — `features/stats/stats.ts` (summary, showsPerYear, topArtists,
+      countriesVisited, totalSpent/spendingPerYear, formatter valuta). Aggiunti
+      `ticket_price_paid`/`ticket_currency` a `ConcertListItem` + `LIST_SELECT`.
+- [x] Step 2 Stats Dashboard (screen 11) — `features/stats/pages/Stats.tsx` +
+      `components/BarChart.tsx`. Summary cards, shows per year, top artists, countries,
+      money spent (area chart). Verificato nel browser (claudetest), console pulita.
 - [ ] Step 3 Stats Extended
 - [ ] Step 4 Artist Page
 - [ ] Step 5 Venue Page
 - [ ] Step 6 Year Wrapped
 - [ ] Aggiorna `PROJECT_STATUS.md` (Sprint 7 ✅, schermate 11/29/09/19/28)
+
+### Note per i prossimi step
+- Il link "Vedi tutto" → Stats Extended **non** è stato aggiunto (route Step 3 ancora
+  assente, e il prototipo di screen 11 non lo mostra). Aggiungilo facendo lo Step 3.
+- Il pill "All time" in alto è **statico** (decorativo, fedele al prototipo). Il filtro
+  per periodo è da implementare (nessuno step lo richiede ancora).
+- La spesa usa la valuta dominante (somma per valuta, mostra quella col totale più alto).
+  Gli show di test non hanno prezzo → card "Money spent" nascosta e "Spent" = "—".
