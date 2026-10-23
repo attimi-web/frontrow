@@ -134,12 +134,21 @@ export function ConcertDetail() {
           <p className="mt-1 font-body text-[13px] text-fg-faint">{data.tour_name}</p>
         )}
         <div className="mt-2.5 flex flex-wrap gap-4">
-          {data.venue && (
-            <Meta>
-              <PinIcon />
-              {[data.venue.name, data.venue.city].filter(Boolean).join(', ')}
-            </Meta>
-          )}
+          {data.venue &&
+            (data.venue_full?.id ? (
+              <Link
+                to={`/venue/${data.venue_full.id}`}
+                className="flex items-center gap-1.5 font-body text-[13px] text-fg-faint transition hover:text-orange"
+              >
+                <PinIcon />
+                {[data.venue.name, data.venue.city].filter(Boolean).join(', ')}
+              </Link>
+            ) : (
+              <Meta>
+                <PinIcon />
+                {[data.venue.name, data.venue.city].filter(Boolean).join(', ')}
+              </Meta>
+            ))}
           <Meta>
             <CalIcon />
             {formatConcertDate(data.date)}

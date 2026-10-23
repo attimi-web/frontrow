@@ -98,7 +98,10 @@ Shareable Card dello Sprint 10, per ora può essere placeholder/screenshot).
       concert_artists + performances (festival). Titolo headliner, support e
       performer festival in Concert Detail ora linkano `/artist/:id` (aggiunto
       `headliner_id` al detail). Verificato: Muse (headliner) e Radiohead (festival).
-- [ ] Step 5 Venue Page
+- [x] Step 5 Venue Page (screen 28) — `features/venues/{api,hooks,pages}`, route
+      `/venue/:id`. Hero + stat row (visite/artisti/spesa), first-visit callout,
+      tab My Shows / Upcoming / Info (con placeholder mappa da lat/lng). Venue nel
+      Concert Detail ora linka `/venue/:id` (via `venue_full.id`). Verificato con O2 Arena.
 - [ ] Step 6 Year Wrapped
 - [ ] Aggiorna `PROJECT_STATUS.md` (Sprint 7 ✅, schermate 11/29/09/19/28)
 
