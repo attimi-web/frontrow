@@ -92,7 +92,12 @@ Shareable Card dello Sprint 10, per ora può essere placeholder/screenshot).
       + `concert_buddies`). Selettore anno. Monthly spend riusa `BarChart`.
       Verificato nel browser (claudetest): venues, buddy @friendtest, empty states
       per generi/spesa (dati di test senza generi/prezzi). Console pulita.
-- [ ] Step 4 Artist Page
+- [x] Step 4 Artist Page (screen 19) — `features/artists/{api,hooks,pages}`, route
+      `/artist/:id`. Hero + stat row (shows/venues/countries/since), tab Shows
+      (timeline per tour), Setlists, Tours. `getArtistShows` unisce headliner +
+      concert_artists + performances (festival). Titolo headliner, support e
+      performer festival in Concert Detail ora linkano `/artist/:id` (aggiunto
+      `headliner_id` al detail). Verificato: Muse (headliner) e Radiohead (festival).
 - [ ] Step 5 Venue Page
 - [ ] Step 6 Year Wrapped
 - [ ] Aggiorna `PROJECT_STATUS.md` (Sprint 7 ✅, schermate 11/29/09/19/28)

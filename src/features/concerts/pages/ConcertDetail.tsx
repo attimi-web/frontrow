@@ -114,9 +114,18 @@ export function ConcertDetail() {
       {/* Title block */}
       <div className="px-6 pt-3">
         <div className="flex items-start justify-between gap-3">
-          <h1 className="font-display text-[28px] font-extrabold leading-[1.05] tracking-[-0.6px] text-fg">
-            {title}
-          </h1>
+          {data.type !== 'festival' && data.headliner_id ? (
+            <Link
+              to={`/artist/${data.headliner_id}`}
+              className="font-display text-[28px] font-extrabold leading-[1.05] tracking-[-0.6px] text-fg transition hover:text-orange"
+            >
+              {title}
+            </Link>
+          ) : (
+            <h1 className="font-display text-[28px] font-extrabold leading-[1.05] tracking-[-0.6px] text-fg">
+              {title}
+            </h1>
+          )}
           <span className="mt-1.5 flex h-[26px] shrink-0 items-center rounded-lg border border-orange/[0.28] bg-orange/[0.14] px-2.5 font-body text-[11px] font-semibold text-orange">
             {STATUS_LABEL[data.status] ?? data.status}
           </span>
@@ -211,7 +220,11 @@ function InfoTab({ data }: { data: ConcertDetailData }) {
         <Card label="Support">
           <div className="flex flex-col gap-3">
             {support.map((l) => (
-              <div key={l.artist.id} className="flex items-center gap-2.5">
+              <Link
+                key={l.artist.id}
+                to={`/artist/${l.artist.id}`}
+                className="flex items-center gap-2.5 rounded-lg transition hover:bg-white/[0.04]"
+              >
                 <AvatarTile name={l.artist.name} size={36} radius={9} />
                 <div>
                   <p className="font-body text-sm font-medium text-[#c8c6d8]">{l.artist.name}</p>
@@ -219,7 +232,7 @@ function InfoTab({ data }: { data: ConcertDetailData }) {
                     {ROLE_LABEL[l.role] ?? l.role}
                   </p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </Card>
@@ -304,14 +317,15 @@ function FestivalSchedule({ data }: { data: ConcertDetailData }) {
                       .sort((a, b) => a.perf_order - b.perf_order)
                       .map((p) => (
                         <li key={p.id} className="flex items-center justify-between gap-2">
-                          <span
+                          <Link
+                            to={`/artist/${p.artist.id}`}
                             className={cn(
-                              'font-body text-sm',
+                              'font-body text-sm transition hover:text-orange',
                               p.attended ? 'text-fg' : 'text-fg-faint line-through',
                             )}
                           >
                             {p.artist.name}
-                          </span>
+                          </Link>
                           <span className="shrink-0 font-body text-xs text-fg-subtle">
                             {p.start_time ? p.start_time.slice(0, 5) : ''}
                             {p.end_time ? `–${p.end_time.slice(0, 5)}` : ''}

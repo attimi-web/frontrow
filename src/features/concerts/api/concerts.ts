@@ -46,6 +46,7 @@ export interface FestivalDayData {
 
 export interface ConcertDetail extends ConcertListItem {
   user_id: string
+  headliner_id: string | null
   tour_name: string | null
   ticket_type: string | null
   ticket_price_paid: number | null
@@ -105,7 +106,7 @@ export async function getConcert(id: string): Promise<ConcertDetail> {
   const { data, error } = await supabase
     .from('concerts')
     .select(
-      'id, user_id, date, type, status, festival_name, tour_name, ticket_type, ticket_price_paid, ticket_currency, ticket_scan_url, photos, setlist_fm_id, personal_note, accred_type, accred_client, accred_photo_pit, accred_first_3_songs, headliner:artists!concerts_headliner_id_fkey(name, image_url), venue:venues!concerts_venue_id_fkey(name, city, country_name), venue_full:venues!concerts_venue_id_fkey(id, name, city, country, country_name), lineup:concert_artists(role, billing_order, artist:artists(id, name, image_url)), festival_days(id, date, day_order, stages:festival_stages(id, stage_name, stage_order, performances(id, role, attended, start_time, end_time, perf_order, artist:artists(id, name, image_url))))',
+      'id, user_id, headliner_id, date, type, status, festival_name, tour_name, ticket_type, ticket_price_paid, ticket_currency, ticket_scan_url, photos, setlist_fm_id, personal_note, accred_type, accred_client, accred_photo_pit, accred_first_3_songs, headliner:artists!concerts_headliner_id_fkey(name, image_url), venue:venues!concerts_venue_id_fkey(name, city, country_name), venue_full:venues!concerts_venue_id_fkey(id, name, city, country, country_name), lineup:concert_artists(role, billing_order, artist:artists(id, name, image_url)), festival_days(id, date, day_order, stages:festival_stages(id, stage_name, stage_order, performances(id, role, attended, start_time, end_time, perf_order, artist:artists(id, name, image_url))))',
     )
     .eq('id', id)
     .single()
