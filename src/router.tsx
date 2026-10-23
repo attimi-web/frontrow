@@ -20,6 +20,7 @@ import { SetlistEditor } from '@/features/concerts/pages/SetlistEditor'
 import { FindFriends } from '@/features/social/pages/FindFriends'
 import { PublicProfile } from '@/features/social/pages/PublicProfile'
 import { Stats } from '@/features/stats/pages/Stats'
+import { StatsExtended } from '@/features/stats/pages/StatsExtended'
 import { Profile } from '@/features/profile/pages/Profile'
 
 export const router = createBrowserRouter([
@@ -50,6 +51,7 @@ export const router = createBrowserRouter([
         ],
       },
       // Full-screen routes (no bottom nav)
+      { path: '/stats/extended', element: <StatsExtended /> },
       { path: '/log', element: <LogShow /> },
       { path: '/show/:id', element: <ConcertDetail /> },
       { path: '/show/:id/edit', element: <EditConcert /> },

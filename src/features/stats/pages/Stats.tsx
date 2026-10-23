@@ -1,6 +1,8 @@
 import { useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import { useConcerts } from '@/features/concerts/hooks/useConcerts'
 import { BarChart, type BarDatum } from '../components/BarChart'
+import { HBars } from '../components/HBars'
 import {
   summaryStats,
   showsPerYear,
@@ -74,40 +76,9 @@ export function Stats() {
           {artists.length > 0 && (
             <section className={`mt-3 ${SECTION}`}>
               <p className={`${SECTION_LABEL} mb-3.5`}>Top artists</p>
-              <div className="flex flex-col gap-[11px]">
-                {artists.map((a, i) => {
-                  const max = artists[0].count
-                  const pct = Math.round((a.count / max) * 100)
-                  return (
-                    <div key={a.name} className="flex items-center gap-2.5">
-                      <span className="w-[110px] flex-none truncate font-body text-xs text-fg-subtle">
-                        {a.name}
-                      </span>
-                      <div className="h-1.5 flex-1 overflow-hidden rounded-[3px] bg-white/[0.06]">
-                        <div
-                          className="h-full rounded-[3px]"
-                          style={{
-                            width: `${pct}%`,
-                            background:
-                              i === 0
-                                ? 'var(--color-orange)'
-                                : `rgba(232,117,42,${(0.65 - i * 0.12).toFixed(2)})`,
-                            boxShadow:
-                              i === 0 ? '0 0 8px rgba(232,117,42,0.4)' : undefined,
-                          }}
-                        />
-                      </div>
-                      <span
-                        className={`w-5 flex-none text-right font-display text-xs font-bold ${
-                          i === 0 ? 'text-orange' : 'text-fg-muted'
-                        }`}
-                      >
-                        {a.count}
-                      </span>
-                    </div>
-                  )
-                })}
-              </div>
+              <HBars
+                data={artists.map((a) => ({ key: a.name, label: a.name, value: a.count }))}
+              />
             </section>
           )}
 
@@ -138,6 +109,16 @@ export function Stats() {
               <MoneyAreaChart data={spendYears} />
             </section>
           )}
+
+          <Link
+            to="/stats/extended"
+            className="mt-3 flex items-center justify-center gap-1.5 rounded-2xl border border-border bg-white/[0.03] p-3.5 font-body text-[13px] font-medium text-orange transition hover:bg-white/[0.05]"
+          >
+            See all stats
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </Link>
         </>
       )}
     </div>

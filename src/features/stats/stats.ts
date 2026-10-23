@@ -11,6 +11,22 @@ export function attendedOnly(concerts: ConcertListItem[]): ConcertListItem[] {
   return concerts.filter((c) => c.status === 'attended')
 }
 
+/** Attended years present in the data, newest first — for the year selector. */
+export function availableYears(concerts: ConcertListItem[]): string[] {
+  const years = new Set<string>()
+  for (const c of attendedOnly(concerts)) years.add(c.date.slice(0, 4))
+  return [...years].sort((a, b) => b.localeCompare(a))
+}
+
+/** Keep only shows in the given year (all shows when `year` is null). */
+export function inYear(
+  concerts: ConcertListItem[],
+  year: string | null,
+): ConcertListItem[] {
+  if (!year) return concerts
+  return concerts.filter((c) => c.date.slice(0, 4) === year)
+}
+
 export interface SummaryStats {
   shows: number
   countries: number
@@ -161,4 +177,93 @@ export function formatCompactMoney(money: MoneyTotal): string {
 /** `€8,420` — full money with thousands separators. */
 export function formatMoney(money: MoneyTotal): string {
   return `${currencySymbol(money.currency)}${Math.round(money.amount).toLocaleString()}`
+}
+
+export interface VenueCount {
+  name: string
+  count: number
+}
+
+/** Most-visited venues, highest first (keyed by name + city). */
+export function topVenues(concerts: ConcertListItem[], limit = 5): VenueCount[] {
+  const map = new Map<string, { name: string; count: number }>()
+  for (const c of attendedOnly(concerts)) {
+    const v = c.venue
+    if (!v?.name) continue
+    const key = `${v.name}|${v.city}`.toLowerCase()
+    const entry = map.get(key)
+    if (entry) entry.count += 1
+    else map.set(key, { name: v.name, count: 1 })
+  }
+  return [...map.values()]
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
+    .slice(0, limit)
+}
+
+export interface MonthlySpend {
+  months: number[]
+  total: MoneyTotal
+}
+
+/** Spend per calendar month (Jan→Dec) for a year, in that year's dominant currency. */
+export function monthlySpending(
+  concerts: ConcertListItem[],
+  year: string,
+): MonthlySpend {
+  const subset = inYear(attendedOnly(concerts), year)
+  const total = totalSpent(subset)
+  const months = new Array(12).fill(0) as number[]
+  for (const c of subset) {
+    if (c.ticket_price_paid == null) continue
+    if ((c.ticket_currency || 'EUR') !== total.currency) continue
+    const monthIdx = Number(c.date.slice(5, 7)) - 1
+    if (monthIdx >= 0 && monthIdx < 12) months[monthIdx] += c.ticket_price_paid
+  }
+  return { months, total }
+}
+
+export interface GenreSlice {
+  genre: string
+  count: number
+  pct: number
+}
+
+/**
+ * Share of shows per genre. Each show contributes every genre of its headliner,
+ * so a multi-genre act counts once per genre. Keeps the top `limit`, folds the
+ * rest into "Other".
+ */
+export function genreBreakdown(
+  genresPerShow: string[][],
+  limit = 4,
+): GenreSlice[] {
+  const counts = new Map<string, number>()
+  let total = 0
+  for (const genres of genresPerShow) {
+    for (const raw of genres) {
+      const g = raw.trim()
+      if (!g) continue
+      counts.set(g, (counts.get(g) ?? 0) + 1)
+      total += 1
+    }
+  }
+  if (total === 0) return []
+  const sorted = [...counts.entries()].sort(
+    (a, b) => b[1] - a[1] || a[0].localeCompare(b[0]),
+  )
+  const top = sorted.slice(0, limit)
+  const otherCount = sorted.slice(limit).reduce((sum, [, n]) => sum + n, 0)
+  const slices = top.map(([genre, count]) => ({
+    genre,
+    count,
+    pct: Math.round((count / total) * 100),
+  }))
+  if (otherCount > 0) {
+    slices.push({
+      genre: 'Other',
+      count: otherCount,
+      pct: Math.round((otherCount / total) * 100),
+    })
+  }
+  return slices
 }

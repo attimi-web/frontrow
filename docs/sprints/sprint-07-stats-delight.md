@@ -85,7 +85,13 @@ Shareable Card dello Sprint 10, per ora può essere placeholder/screenshot).
 - [x] Step 2 Stats Dashboard (screen 11) — `features/stats/pages/Stats.tsx` +
       `components/BarChart.tsx`. Summary cards, shows per year, top artists, countries,
       money spent (area chart). Verificato nel browser (claudetest), console pulita.
-- [ ] Step 3 Stats Extended
+- [x] Step 3 Stats Extended (screen 29) — `features/stats/pages/StatsExtended.tsx`,
+      route `/stats/extended`, link "See all stats" dalla dashboard. Top venues +
+      buddy leaderboard via `components/HBars.tsx` (riusato anche nei Top artists),
+      genre breakdown + buddy leaderboard via `api/stats.ts` (query generi headliner
+      + `concert_buddies`). Selettore anno. Monthly spend riusa `BarChart`.
+      Verificato nel browser (claudetest): venues, buddy @friendtest, empty states
+      per generi/spesa (dati di test senza generi/prezzi). Console pulita.
 - [ ] Step 4 Artist Page
 - [ ] Step 5 Venue Page
 - [ ] Step 6 Year Wrapped

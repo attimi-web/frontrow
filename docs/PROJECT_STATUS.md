@@ -17,7 +17,7 @@
 | 4 | Festivals (builder giorni/palchi/performance, RPC save_festival) | ✅ |
 | 5 | Setlists & Photos (editor setlist, Photos su Storage, edge function setlist.fm) | ✅ |
 | 6 | Social (friends, public profile + mutual shows, buddy tagging) | ✅ |
-| 7 | Stats & Delight (Stats dashboard, Year Wrapped, Artist Page, Venue Page) | 🟡 Step 1–2 fatti (data layer + Stats dashboard, screen 11) → `sprints/sprint-07-stats-delight.md` |
+| 7 | Stats & Delight (Stats dashboard, Year Wrapped, Artist Page, Venue Page) | 🟡 Step 1–3 fatti (data layer + Stats dashboard + Stats Extended, screen 11/29) → `sprints/sprint-07-stats-delight.md` |
 | 8 | Map & Gamification (World Map, Achievements, Tour Tracker) | ⬜ → `sprints/sprint-08-map-gamification.md` |
 | 9 | Discovery & Notifications (Search, Wishlist, Notifications, Press/Media) | ⬜ → `sprints/sprint-09-discovery-notifications.md` |
 | 10 | PWA (manifest, service worker, offline, install, Settings, Shareable card, Confirm modal) | ⬜ → `sprints/sprint-10-pwa.md` |
