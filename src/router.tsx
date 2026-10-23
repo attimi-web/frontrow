@@ -21,6 +21,7 @@ import { FindFriends } from '@/features/social/pages/FindFriends'
 import { PublicProfile } from '@/features/social/pages/PublicProfile'
 import { Stats } from '@/features/stats/pages/Stats'
 import { StatsExtended } from '@/features/stats/pages/StatsExtended'
+import { YearWrapped } from '@/features/stats/pages/YearWrapped'
 import { ArtistPage } from '@/features/artists/pages/ArtistPage'
 import { VenuePage } from '@/features/venues/pages/VenuePage'
 import { Profile } from '@/features/profile/pages/Profile'
@@ -54,6 +55,8 @@ export const router = createBrowserRouter([
       },
       // Full-screen routes (no bottom nav)
       { path: '/stats/extended', element: <StatsExtended /> },
+      { path: '/wrapped', element: <YearWrapped /> },
+      { path: '/wrapped/:year', element: <YearWrapped /> },
       { path: '/artist/:id', element: <ArtistPage /> },
       { path: '/venue/:id', element: <VenuePage /> },
       { path: '/log', element: <LogShow /> },

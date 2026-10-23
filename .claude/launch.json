@@ -4,14 +4,34 @@
     {
       "name": "dev",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
       "port": 5173
     },
     {
       "name": "design",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "5050", "--directory", "design_handoff"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "5050",
+        "--directory",
+        "design_handoff"
+      ],
       "port": 5050
+    },
+    {
+      "name": "attimi-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/Users/tommaso/WebApps/attimi-photography",
+        "run",
+        "dev"
+      ],
+      "port": 4321
     }
   ]
 }

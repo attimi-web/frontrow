@@ -102,8 +102,25 @@ Shareable Card dello Sprint 10, per ora può essere placeholder/screenshot).
       `/venue/:id`. Hero + stat row (visite/artisti/spesa), first-visit callout,
       tab My Shows / Upcoming / Info (con placeholder mappa da lat/lng). Venue nel
       Concert Detail ora linka `/venue/:id` (via `venue_full.id`). Verificato con O2 Arena.
-- [ ] Step 6 Year Wrapped
-- [ ] Aggiorna `PROJECT_STATUS.md` (Sprint 7 ✅, schermate 11/29/09/19/28)
+- [x] Step 6 Year Wrapped (screen 09) — `features/stats/pages/YearWrapped.tsx`, route
+      `/wrapped` e `/wrapped/:year`. Hero (anno + WRAPPED), big stat (shows/countries/
+      cities), top 3 artisti, stats grid (spesa/città più visitata/città/paesi), concert
+      buddy dell'anno, bottone Share (navigator.share con fallback clipboard), year
+      switcher. Reveal sequenziale via componente `Reveal` (CSS transition + delay
+      incrementale, ri-triggerato al cambio anno). Entry point: card "Your Year Wrapped"
+      in cima allo Stats dashboard. Helper `wrappedStats()` aggiunto a `stats.ts`.
+      Verificato nel browser (claudetest): 2026, 4 show, Muse #1, buddy @friendtest,
+      London città top. Console pulita, typecheck verde.
+- [x] Aggiorna `PROJECT_STATUS.md` (Sprint 7 ✅, schermate 11/29/09/19/28)
+
+### Note Step 6
+- **Buddy of the year**: usa il top della buddy leaderboard **all-time** (i link
+  `concert_buddies` non portano la data del concerto, quindi un filtro per anno
+  richiederebbe un join extra con `concerts.date`). Da affinare se serve.
+- **Share**: per ora apre lo share sheet di sistema / copia un testo riassuntivo.
+  La Shareable Card vera è lo Sprint 10 (screen 27).
+- **Stats grid**: rispetto al prototipo (songs heard / km traveled) mostra solo
+  metriche realmente calcolabili dai dati (spesa, città più visitata, città, paesi).
 
 ### Note per i prossimi step
 - Il link "Vedi tutto" → Stats Extended **non** è stato aggiunto (route Step 3 ancora

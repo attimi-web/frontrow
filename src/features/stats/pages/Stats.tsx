@@ -66,6 +66,38 @@ export function Stats() {
         </div>
       ) : (
         <>
+          {/* Year Wrapped entry */}
+          <Link
+            to="/wrapped"
+            className="mt-5 flex items-center gap-3.5 overflow-hidden rounded-2xl border border-orange/25 p-4"
+            style={{
+              background:
+                'radial-gradient(ellipse at 100% 0%, rgba(232,117,42,0.22) 0%, transparent 60%), rgba(255,255,255,0.03)',
+            }}
+          >
+            <div className="flex h-11 w-11 flex-none items-center justify-center rounded-[14px] bg-orange/15">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M12 3l2.09 4.26L18.82 8l-3.41 3.32.8 4.68L12 13.77 7.79 16l.8-4.68L5.18 8l4.73-.74L12 3z"
+                  stroke="#e8752a"
+                  strokeWidth="1.8"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="font-display text-[15px] font-bold tracking-[-0.3px] text-fg">
+                Your Year Wrapped
+              </p>
+              <p className="mt-0.5 font-body text-xs text-fg-subtle">
+                Relive your year in live music
+              </p>
+            </div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="flex-none text-orange">
+              <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </Link>
+
           {/* Shows per year */}
           <section className={`mt-5 ${SECTION}`}>
             <p className={`${SECTION_LABEL} mb-4`}>Shows per year</p>

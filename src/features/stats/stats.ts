@@ -222,6 +222,36 @@ export function monthlySpending(
   return { months, total }
 }
 
+export interface WrappedStats {
+  shows: number
+  countries: number
+  cities: number
+  topCity: { city: string; count: number } | null
+  spent: MoneyTotal
+}
+
+/** Headline numbers for the Year Wrapped recap (screen 09) — attended only. */
+export function wrappedStats(concerts: ConcertListItem[]): WrappedStats {
+  const attended = attendedOnly(concerts)
+  const countries = new Set<string>()
+  const cityCounts = new Map<string, number>()
+  for (const c of attended) {
+    if (c.venue?.country_name) countries.add(c.venue.country_name)
+    if (c.venue?.city) cityCounts.set(c.venue.city, (cityCounts.get(c.venue.city) ?? 0) + 1)
+  }
+  let topCity: { city: string; count: number } | null = null
+  for (const [city, count] of cityCounts) {
+    if (!topCity || count > topCity.count) topCity = { city, count }
+  }
+  return {
+    shows: attended.length,
+    countries: countries.size,
+    cities: cityCounts.size,
+    topCity,
+    spent: totalSpent(attended),
+  }
+}
+
 export interface GenreSlice {
   genre: string
   count: number
