@@ -8,6 +8,7 @@ import { useConcerts } from '@/features/concerts/hooks/useConcerts'
 import { ConcertCard } from '@/features/concerts/components/ConcertCard'
 import { getConcertStats, groupConcertsByYear } from '@/features/concerts/utils'
 import { useDerivedFriends } from '@/features/social/hooks'
+import { useAchievements } from '@/features/achievements/hooks/useAchievements'
 import { toast } from '@/stores/useUIStore'
 import { cn } from '@/lib/utils/cn'
 
@@ -145,11 +146,7 @@ export function Profile() {
           ) : (
             <p className="py-8 text-center font-body text-sm text-fg-subtle">No shows yet.</p>
           ))}
-        {tab === 'Stats' && (
-          <p className="py-8 text-center font-body text-sm text-fg-subtle">
-            Detailed stats arrive in Sprint 7.
-          </p>
-        )}
+        {tab === 'Stats' && <StatsTab />}
         {tab === 'Friends' && <FriendsTab />}
       </div>
     </div>
@@ -214,6 +211,35 @@ function FriendsTab() {
           ))}
         </div>
       )}
+    </div>
+  )
+}
+
+function StatsTab() {
+  const { unlockedCount, total } = useAchievements()
+  const links = [
+    { to: '/achievements', title: 'Achievements', sub: total ? `${unlockedCount} / ${total} badges` : 'Badges' },
+    { to: '/map', title: 'World Map', sub: 'Every city you saw a show in' },
+    { to: '/stats', title: 'Stats', sub: 'Charts, top artists, money spent' },
+    { to: '/wrapped', title: 'Year Wrapped', sub: 'Your year in live music' },
+  ]
+  return (
+    <div className="flex flex-col gap-2">
+      {links.map((l) => (
+        <Link
+          key={l.to}
+          to={l.to}
+          className="flex items-center gap-3 rounded-2xl border border-border bg-white/[0.03] px-4 py-3.5 transition hover:bg-white/[0.05]"
+        >
+          <div className="min-w-0 flex-1">
+            <p className="font-display text-sm font-bold text-fg">{l.title}</p>
+            <p className="mt-0.5 font-body text-xs text-fg-faint">{l.sub}</p>
+          </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="text-fg-faint">
+            <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </Link>
+      ))}
     </div>
   )
 }

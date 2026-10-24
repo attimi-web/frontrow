@@ -90,6 +90,25 @@
   }
 }
 
+/* Achievements: unlock celebration (scale + glow burst). */
+.achievement-burst {
+  animation: achievement-burst 900ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes achievement-burst {
+  0% {
+    transform: scale(0.92);
+    box-shadow: 0 0 0 0 rgba(232, 117, 42, 0.55);
+  }
+  45% {
+    transform: scale(1.03);
+    box-shadow: 0 0 0 14px rgba(232, 117, 42, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 28px 0 rgba(232, 117, 42, 0.18);
+  }
+}
+
 @keyframes shimmer {
   0% {
     transform: translateX(-100%);

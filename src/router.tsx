@@ -25,6 +25,7 @@ import { YearWrapped } from '@/features/stats/pages/YearWrapped'
 import { ArtistPage } from '@/features/artists/pages/ArtistPage'
 import { VenuePage } from '@/features/venues/pages/VenuePage'
 import { TourTracker } from '@/features/tours/pages/TourTracker'
+import { Achievements } from '@/features/achievements/pages/Achievements'
 import { Profile } from '@/features/profile/pages/Profile'
 
 export const router = createBrowserRouter([
@@ -61,6 +62,7 @@ export const router = createBrowserRouter([
       { path: '/artist/:id', element: <ArtistPage /> },
       { path: '/venue/:id', element: <VenuePage /> },
       { path: '/tour/:id', element: <TourTracker /> },
+      { path: '/achievements', element: <Achievements /> },
       {
         path: '/map',
         // Lazy: d3-geo + the world topojson stay out of the main bundle.

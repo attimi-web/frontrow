@@ -23,7 +23,7 @@ date-fns · d3-geo + topojson-client + world-atlas (World Map). Build: `vite`.
 - Nome: `frontrow` · ref: **`aznauvbcnisndwitunjb`** · region eu-west-1
 - URL: `https://aznauvbcnisndwitunjb.supabase.co`
 - Publishable (anon) key: `sb_publishable_U_gHUcrQEFiaeS6HcZ3uqw_0_V5qLFf` (pubblica, già in `.env.example`)
-- Migrazioni applicate: `0001`–`0012` (vedi `DATABASE.md`)
+- Migrazioni applicate: `0001`–`0013` (vedi `DATABASE.md`)
 - Edge function deployate: `setlist-import` (richiede secret `SETLISTFM_API_KEY`, non ancora impostato),
   `geocode-venue` (lat/lng dei venue, nessun secret)
 - Storage bucket: `concert-photos` (pubblico in lettura, scrittura solo owner)

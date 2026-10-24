@@ -91,6 +91,15 @@ entry point (Profile o Home).
 - Il tuo show Muse (account `tomm`) è stato collegato al tour "The Wow! Signal Europe Tour 2026"
   dal backfill; `total_shows` è ancora vuoto.
 
+### Note Step 4
+- **30 badge, non 42**: solo criteri calcolabili dai dati attuali. Per aggiungerne: nuova riga in
+  una migrazione + (se serve) nuovo `MetricType` in `logic.ts`.
+- `user_achievements` è scritta dal client (RLS owner): un utente può "barare" sui propri badge
+  e quindi sulle % di sblocco. Accettabile ora; per robustezza → calcolo server-side (approccio b).
+- `same_artist` conta solo gli headliner (non support/festival); `streak_days` conta giorni
+  distinti consecutivi; un festival multi-giorno vale una sola data (quella del concerto).
+- Vibrazione solo dopo un gesto dell'utente (`navigator.userActivation`).
+
 ## Checklist chiusura sprint
 - [x] Step 1 geocoding venue — edge function `geocode-venue` (deployata, verify_jwt).
       `findOrCreateVenue` (catalog.ts) la invoca fire-and-forget quando il venue non ha
@@ -112,5 +121,15 @@ entry point (Profile o Home).
       riassuntiva per le date non loggate). Entry: nome tour nel Concert Detail, tab Tours
       dell'Artist Page. Verificato (claudetest, tour di test poi rimosso): edit show → tour
       creato → link → tracker → totale 5 → 1/5 20%; guard RPC su tour altrui. Console pulita.
-- [ ] Step 4 Achievements (+ seed migrazione)
-- [ ] Aggiorna `PROJECT_STATUS.md` (Sprint 8 ✅, schermate 18/21/22)
+- [x] Step 4 Achievements (screen 21) — migrazione `0013_seed_achievements` (30 badge, colonna
+      `sort_order`, RPC `achievement_unlock_rates`). `features/achievements/{logic.ts,api,hooks,
+      components/BadgeIcon.tsx,pages/Achievements.tsx}`, route `/achievements`. Calcolo lato client
+      (approccio a): replay degli show in ordine di data → `unlocked_at` = data dello show che ha
+      raggiunto la soglia; sync in `user_achievements` (upsert nuovi, delete non più validi).
+      Header N/30 + barra, card "Just Unlocked" (rarità + % utenti + data, animazione burst +
+      vibrazione se appena sbloccato), griglia 3 colonne (sbloccati / prossimo della famiglia
+      in progress con barra / bloccati). Entry: tab "Stats" del Profilo (sostituito il
+      placeholder "arrive in Sprint 7" con link Achievements / World Map / Stats / Wrapped).
+      Verificato (claudetest): 5/30, Back to Back ultimo, 33.3% utenti, righe DB corrette,
+      celebrazione su badge rimosso dal DB, 1 sola upsert. Console pulita.
+- [x] Aggiorna `PROJECT_STATUS.md` (Sprint 8 ✅, schermate 18/21/22)

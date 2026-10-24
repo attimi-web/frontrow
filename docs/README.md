@@ -20,7 +20,7 @@ Sostituisci sprint/step con quello che vuoi fare. Un solo step per chat.
 | File | Cosa contiene |
 |---|---|
 | [`CONTEXT.md`](CONTEXT.md) | **Bootstrap**: fatti chiave (repo, Supabase, account test, env, come far girare l'app). Da leggere sempre per primo. |
-| [`PROJECT_STATUS.md`](PROJECT_STATUS.md) | Cosa è fatto (sprint 0–6) e cosa manca. Aggiornato dopo ogni sprint. |
+| [`PROJECT_STATUS.md`](PROJECT_STATUS.md) | Cosa è fatto (sprint 0–8) e cosa manca. Aggiornato dopo ogni sprint. |
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | Stack, struttura cartelle, componenti condivisi, convenzioni di codice. |
 | [`DATABASE.md`](DATABASE.md) | Schema, migrazioni, pattern RLS, storage, edge functions, **gotcha** importanti. |
 | [`WORKFLOW.md`](WORKFLOW.md) | Il "rituale" di ogni chat: leggere il design, costruire, verificare, committare. |

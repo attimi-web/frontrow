@@ -22,6 +22,7 @@ export type Database = {
           name: string
           rarity: Database["public"]["Enums"]["achievement_rarity"]
           slug: string
+          sort_order: number
         }
         Insert: {
           criteria?: Json
@@ -30,6 +31,7 @@ export type Database = {
           name: string
           rarity?: Database["public"]["Enums"]["achievement_rarity"]
           slug: string
+          sort_order?: number
         }
         Update: {
           criteria?: Json
@@ -38,6 +40,7 @@ export type Database = {
           name?: string
           rarity?: Database["public"]["Enums"]["achievement_rarity"]
           slug?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -773,6 +776,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      achievement_unlock_rates: {
+        Args: Record<PropertyKey, never>
+        Returns: { achievement_id: string; pct: number }[]
+      }
       can_read_concert: { Args: { cid: string }; Returns: boolean }
       find_or_create_artist: {
         Args: { p_name: string }

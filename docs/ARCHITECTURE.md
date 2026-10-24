@@ -29,9 +29,13 @@ src/
     auth/        (pages, api, hooks, components, schemas)
     concerts/    (Log/Detail/Edit/MyShows, FestivalForm, SetlistEditor, api, hooks, utils)
     home/        (Home dashboard, OnThisDay)
-    stats/       (Stats tab — placeholder, da espandere in Sprint 7)
+    stats/       (Stats dashboard, Stats Extended, Year Wrapped, stats.ts)
     profile/     (Profile tab)
     social/      (FindFriends, PublicProfile, BuddiesTab, api/social.ts, hooks.ts)
+    artists/ venues/  (Artist Page, Venue Page)
+    map/         (World Map: geo.ts aggregazioni, WorldMapCanvas d3-geo — route lazy)
+    tours/       (Tour Tracker)
+    achievements/(logic.ts motore badge, sync user_achievements, pagina)
 supabase/
   migrations/*.sql                    # fonte di verità dello schema (replay su prod)
   functions/<name>/index.ts           # edge functions (Deno)
@@ -47,7 +51,8 @@ docs/                                 # questi file di pianificazione
   - `TabLayout` children: `/home`, `/shows`, `/stats`, `/profile` (hanno la bottom nav).
   - Full-screen (no bottom nav): `/log`, `/show/:id`, `/show/:id/edit`,
     `/show/:id/setlist`, `/friends`, `/u/:username`, `/stats/extended`, `/wrapped(/:year)`,
-    `/artist/:id`, `/venue/:id`, `/on-this-day`, `/map` (lazy: `route.lazy` → chunk separato).
+    `/artist/:id`, `/venue/:id`, `/on-this-day`, `/map` (lazy: `route.lazy` → chunk separato),
+    `/tour/:id`, `/achievements`.
 - `*` → redirect a `/`.
 
 ## Design token (Tailwind v4, in `styles/index.css` @theme)
