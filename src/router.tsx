@@ -59,6 +59,11 @@ export const router = createBrowserRouter([
       { path: '/wrapped/:year', element: <YearWrapped /> },
       { path: '/artist/:id', element: <ArtistPage /> },
       { path: '/venue/:id', element: <VenuePage /> },
+      {
+        path: '/map',
+        // Lazy: d3-geo + the world topojson stay out of the main bundle.
+        lazy: () => import('@/features/map/pages/WorldMap').then((m) => ({ Component: m.WorldMap })),
+      },
       { path: '/log', element: <LogShow /> },
       { path: '/show/:id', element: <ConcertDetail /> },
       { path: '/show/:id/edit', element: <EditConcert /> },

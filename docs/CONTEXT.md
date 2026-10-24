@@ -17,7 +17,7 @@ rivivi ogni concerto e festival. Larghezza di design 390px. Solo dark mode.
 ## Stack
 React 18 · TypeScript · Vite · Tailwind CSS v4 · Zustand · TanStack Query ·
 React Hook Form + Zod · React Router v7 · Supabase (Auth/Postgres/Storage/Edge) ·
-date-fns · react-simple-maps (per la World Map, da aggiungere). Build: `vite`.
+date-fns · d3-geo + topojson-client + world-atlas (World Map). Build: `vite`.
 
 ## Supabase (progetto DEV)
 - Nome: `frontrow` · ref: **`aznauvbcnisndwitunjb`** · region eu-west-1

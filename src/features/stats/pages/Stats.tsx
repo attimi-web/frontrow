@@ -117,7 +117,18 @@ export function Stats() {
           {/* Countries visited */}
           {countries.length > 0 && (
             <section className={`mt-3 ${SECTION}`}>
-              <p className={`${SECTION_LABEL} mb-3.5`}>Countries visited</p>
+              <div className="mb-3.5 flex items-center justify-between">
+                <p className={SECTION_LABEL}>Countries visited</p>
+                <Link
+                  to="/map"
+                  className="flex items-center gap-1 font-body text-xs font-medium text-orange"
+                >
+                  Map
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </Link>
+              </div>
               <div className="flex flex-col gap-2.5">
                 {countries.map((c) => (
                   <div key={c.country} className="flex items-center justify-between">

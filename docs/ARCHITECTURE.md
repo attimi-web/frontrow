@@ -46,7 +46,8 @@ docs/                                 # questi file di pianificazione
 - `RequireProfile` wrappa tutto il resto:
   - `TabLayout` children: `/home`, `/shows`, `/stats`, `/profile` (hanno la bottom nav).
   - Full-screen (no bottom nav): `/log`, `/show/:id`, `/show/:id/edit`,
-    `/show/:id/setlist`, `/friends`, `/u/:username`.
+    `/show/:id/setlist`, `/friends`, `/u/:username`, `/stats/extended`, `/wrapped(/:year)`,
+    `/artist/:id`, `/venue/:id`, `/on-this-day`, `/map` (lazy: `route.lazy` → chunk separato).
 - `*` → redirect a `/`.
 
 ## Design token (Tailwind v4, in `styles/index.css` @theme)

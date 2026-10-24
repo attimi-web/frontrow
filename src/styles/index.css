@@ -73,6 +73,23 @@
   }
 }
 
+/* World Map: dots scale in with a stagger (delay set inline). */
+.map-dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: map-dot-in 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes map-dot-in {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 @keyframes shimmer {
   0% {
     transform: translateX(-100%);

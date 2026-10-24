@@ -71,6 +71,16 @@ entry point (Profile o Home).
   gli altri utenti ricevono 403. Il geocoding del singolo venue resta aperto a tutti gli utenti
   loggati (scrive solo se le coordinate mancano).
 
+### Note Step 2
+- **Lib**: `d3-geo` + `topojson-client` + `world-atlas` (`land-110m.json`, senza Antartide) invece
+  di `react-simple-maps` (che è solo un wrapper non più mantenuto di queste lib).
+- **km total** = somma delle distanze (great-circle) tra show consecutivi in ordine di data,
+  solo venue geocodificati. Non conosciamo la "casa" dell'utente, quindi è un'approssimazione.
+- I festival senza `venue_id` non compaiono sulla mappa né nei conteggi paesi/città.
+- Il pill "All time" in alto mostra la selezione corrente ma è statico (come in Stats); il filtro
+  vero sono le chip anno.
+- Nessun bottone back nel prototipo: aggiunto un chevron a sinistra del titolo per tornare indietro.
+
 ## Checklist chiusura sprint
 - [x] Step 1 geocoding venue — edge function `geocode-venue` (deployata, verify_jwt).
       `findOrCreateVenue` (catalog.ts) la invoca fire-and-forget quando il venue non ha
@@ -78,7 +88,12 @@ entry point (Profile o Home).
       Backfill eseguito: i 3 venue esistenti hanno lat/lng a precisione venue. Verificato:
       venue nuovo creato dal client → coordinate scritte in pochi secondi; Venue Page → Info
       mostra le coordinate.
-- [ ] Step 2 World Map
+- [x] Step 2 World Map (screen 18) — `features/map/{geo.ts,components/WorldMapCanvas.tsx,pages/WorldMap.tsx}`,
+      route `/map` (lazy, chunk separato ~85kB). Entry: link "Map" nella card "Countries visited"
+      dello Stats dashboard. Chip anno (All + anni), punti per città con scale-in sfalsato,
+      tooltip città sul tap (default città top), strip countries/cities/km, Top Countries con
+      bandiere e barre. `LIST_SELECT` ora include `venue.country/lat/lng`. Verificato (claudetest):
+      London + Sesto San Giovanni, 2 paesi, 948 km, filtro 2026, tap → tooltip. Console pulita.
 - [ ] Step 3 Tour Tracker
 - [ ] Step 4 Achievements (+ seed migrazione)
 - [ ] Aggiorna `PROJECT_STATUS.md` (Sprint 8 ✅, schermate 18/21/22)
