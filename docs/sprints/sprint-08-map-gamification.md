@@ -45,7 +45,7 @@ dalla Artist Page.
 ## Step 4 — Achievements (screen 21)
 **Design**: `grep "21 — Achievements"`.
 **Cosa**: griglia badge (18/42 stile), unlocked/locked/in-progress con barra, rarità.
-- **DB**: seed del catalogo `achievements` (migrazione, es. `0011_seed_achievements.sql`)
+- **DB**: seed del catalogo `achievements` (migrazione, es. `0012_seed_achievements.sql`)
   con slug/name/description/rarity/criteria(jsonb). `user_achievements` traccia unlock+progress.
 - **Logica unlock**: due approcci —
   (a) calcolo lato client dai dati (semplice, per MVP): deriva quali achievement sono sbloccati
@@ -67,8 +67,9 @@ entry point (Profile o Home).
   Per la World Map (raggruppa per città/paese) va bene. Se servono pin precisi → provider con
   chiave (Mapbox, LocationIQ, Google) come secret dell'edge function.
 - La precisione (venue/città) non è salvata nel DB, solo restituita dalla function.
-- Il backfill è richiamabile da qualsiasi utente autenticato (limite 25 venue per chiamata):
-  innocuo in dev; da rivedere prima della produzione.
+- Il backfill (`{backfill:true}`, max 25 venue) è **solo admin** (`app_admins`, migrazione `0011`);
+  gli altri utenti ricevono 403. Il geocoding del singolo venue resta aperto a tutti gli utenti
+  loggati (scrive solo se le coordinate mancano).
 
 ## Checklist chiusura sprint
 - [x] Step 1 geocoding venue — edge function `geocode-venue` (deployata, verify_jwt).

@@ -8,7 +8,7 @@ Progetto DEV: ref `aznauvbcnisndwitunjb`.
 setlist_fm_id, accred_*), `concert_artists` (lineup junction), `festival_days`,
 `festival_stages`, `performances`, `setlist_songs`, `concert_buddies`, `friendships`,
 `achievements` (catalogo), `user_achievements`, `wishlist_artists`, `notifications`,
-`push_subscriptions`.
+`push_subscriptions`, `app_admins` (admin app, solo service role).
 
 RLS attiva su tutte. Pattern: l'utente vede/modifica solo i propri dati; i profili pubblici
 e gli show "attended" di profili pubblici sono leggibili da altri (per i profili pubblici e i mutual show).
@@ -26,8 +26,12 @@ e gli show "attended" di profili pubblici sono leggibili da altri (per i profili
 | 0008 | `0008_save_festival.sql` | RPC `save_festival(p_concert_id, p_payload jsonb)`: crea/sostituisce la gerarchia festival in modo atomico (SECURITY INVOKER) |
 | 0009 | `0009_storage_concert_photos.sql` | bucket storage `concert-photos` + policy owner-only |
 | 0010 | `0010_social_notifications.sql` | trigger SECURITY DEFINER che scrivono in `notifications`: friend request, friend accepted, buddy tagged, buddy confirmed |
+| 0011 | `0011_app_admins.sql` | tabella `app_admins(user_id)`: RLS senza policy + grant revocati → solo service role |
 
-Prossima migrazione libera: **`0011`**.
+Prossima migrazione libera: **`0012`**.
+
+> **Admin**: le righe di `app_admins` si inseriscono a mano per ambiente (gli id utente cambiano):
+> `insert into app_admins (user_id) values ('<auth.users.id>');`. Sul dev l'admin è `tomm`.
 
 > **Nomi nella history del DB ≠ nomi dei file.** `list_migrations` sul progetto dev mostra nomi
 > storici diversi dal repo: `0006_whoami_debug` (funzione di debug, poi rimossa),
@@ -67,7 +71,7 @@ Prossima migrazione libera: **`0011`**.
   Legge `SETLISTFM_API_KEY` dai secret (**da impostare**). verify_jwt=true.
   Deploy via MCP `deploy_edge_function` oppure `supabase functions deploy setlist-import`.
 - `geocode-venue`: scrive `venues.lat/lng` con il service role (i client non possono fare UPDATE
-  sui venue). Body `{venueId}` o `{backfill:true}`. Photon → fallback Open-Meteo (città);
+  sui venue). Body `{venueId}` o `{backfill:true}` (backfill **solo admin**: chi chiama deve essere in `app_admins`, altrimenti 403). Photon → fallback Open-Meteo (città);
   Nominatim è bloccato dagli IP di Supabase. Nessun secret. verify_jwt=true. Chiamata dal client
   in `findOrCreateVenue` (`requestVenueGeocode`). Con il deploy via MCP includi anche
   `../_shared/cors.ts` tra i file.

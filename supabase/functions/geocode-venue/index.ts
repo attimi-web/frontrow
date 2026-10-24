@@ -6,6 +6,7 @@
 // Body:
 //   { venueId: string }   geocode one venue (no-op if it already has lat/lng)
 //   { backfill: true }    geocode up to BACKFILL_LIMIT venues still missing lat/lng
+//                         (admin-only: caller must be in app_admins)
 //
 // Providers (no API keys):
 //   1. Photon (komoot, OSM data) for the venue itself — precise pin.
@@ -14,7 +15,7 @@
 // IPs. Photon may also be unreachable from the edge (connection refused); a
 // provider failure just falls through to the next one. We identify ourselves
 // and keep to ~1 request/second (fair use).
-import { createClient } from 'jsr:@supabase/supabase-js@2'
+import { createClient, type SupabaseClient } from 'jsr:@supabase/supabase-js@2'
 import { corsHeaders } from '../_shared/cors.ts'
 
 const PHOTON = 'https://photon.komoot.io/api/'
@@ -95,6 +96,16 @@ async function geocode(v: VenueRow): Promise<{ lat: number; lng: number; precisi
   return null
 }
 
+/** True when the caller's JWT belongs to a user listed in app_admins (0011). */
+async function isAppAdmin(admin: SupabaseClient, req: Request): Promise<boolean> {
+  const jwt = req.headers.get('Authorization')?.replace(/^Bearer\s+/i, '')
+  if (!jwt) return false
+  const { data: { user } } = await admin.auth.getUser(jwt)
+  if (!user) return false
+  const { data } = await admin.from('app_admins').select('user_id').eq('user_id', user.id).maybeSingle()
+  return !!data
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
 
@@ -108,6 +119,7 @@ Deno.serve(async (req) => {
 
     let venues: VenueRow[]
     if (backfill) {
+      if (!(await isAppAdmin(admin, req))) return json({ error: 'backfill is admin-only' }, 403)
       const { data, error } = await admin
         .from('venues')
         .select(cols)
