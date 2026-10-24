@@ -59,8 +59,24 @@ entry point (Profile o Home).
 
 ---
 
+### Note Step 1
+- **Provider**: Nominatim NON si può usare dall'edge (risponde 403 agli IP di Supabase).
+  Si usa **Photon** (komoot, dati OSM, senza chiave) per il venue preciso e **Open-Meteo**
+  geocoding per il centro città come fallback. Photon dall'edge viene rifiutato a intermittenza
+  (connection refused, 1 retry): molti venue nuovi avranno quindi coordinate **a livello città**.
+  Per la World Map (raggruppa per città/paese) va bene. Se servono pin precisi → provider con
+  chiave (Mapbox, LocationIQ, Google) come secret dell'edge function.
+- La precisione (venue/città) non è salvata nel DB, solo restituita dalla function.
+- Il backfill è richiamabile da qualsiasi utente autenticato (limite 25 venue per chiamata):
+  innocuo in dev; da rivedere prima della produzione.
+
 ## Checklist chiusura sprint
-- [ ] Step 1 geocoding venue
+- [x] Step 1 geocoding venue — edge function `geocode-venue` (deployata, verify_jwt).
+      `findOrCreateVenue` (catalog.ts) la invoca fire-and-forget quando il venue non ha
+      lat/lng (copre concerti e festival). Body `{venueId}` oppure `{backfill:true}` (max 25).
+      Backfill eseguito: i 3 venue esistenti hanno lat/lng a precisione venue. Verificato:
+      venue nuovo creato dal client → coordinate scritte in pochi secondi; Venue Page → Info
+      mostra le coordinate.
 - [ ] Step 2 World Map
 - [ ] Step 3 Tour Tracker
 - [ ] Step 4 Achievements (+ seed migrazione)

@@ -24,7 +24,8 @@ date-fns · react-simple-maps (per la World Map, da aggiungere). Build: `vite`.
 - URL: `https://aznauvbcnisndwitunjb.supabase.co`
 - Publishable (anon) key: `sb_publishable_U_gHUcrQEFiaeS6HcZ3uqw_0_V5qLFf` (pubblica, già in `.env.example`)
 - Migrazioni applicate: `0001`–`0010` (vedi `DATABASE.md`)
-- Edge function deployata: `setlist-import` (richiede secret `SETLISTFM_API_KEY`, non ancora impostato)
+- Edge function deployate: `setlist-import` (richiede secret `SETLISTFM_API_KEY`, non ancora impostato),
+  `geocode-venue` (lat/lng dei venue, nessun secret)
 - Storage bucket: `concert-photos` (pubblico in lettura, scrittura solo owner)
 
 ## Env locale

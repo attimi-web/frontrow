@@ -57,5 +57,18 @@ export async function findOrCreateVenue(input: {
     p_country_name: input.country_name,
   })
   if (error) throw error
-  return data as Venue
+  const venue = data as Venue
+  if (venue.lat == null || venue.lng == null) requestVenueGeocode(venue.id)
+  return venue
+}
+
+/** Fire-and-forget: the geocode-venue Edge Function looks up lat/lng
+ *  (Nominatim) and stores them on the venue. Never blocks or fails a save. */
+export function requestVenueGeocode(venueId: string): void {
+  supabase.functions
+    .invoke('geocode-venue', { body: { venueId } })
+    .then(({ error }) => {
+      if (error) console.warn('Venue geocoding failed', error)
+    })
+    .catch((e) => console.warn('Venue geocoding failed', e))
 }

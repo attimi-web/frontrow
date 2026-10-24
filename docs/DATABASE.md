@@ -66,6 +66,11 @@ Prossima migrazione libera: **`0011`**.
 - `setlist-import`: cerca su setlist.fm (artist+date) e normalizza in `{title,is_encore,note}`.
   Legge `SETLISTFM_API_KEY` dai secret (**da impostare**). verify_jwt=true.
   Deploy via MCP `deploy_edge_function` oppure `supabase functions deploy setlist-import`.
+- `geocode-venue`: scrive `venues.lat/lng` con il service role (i client non possono fare UPDATE
+  sui venue). Body `{venueId}` o `{backfill:true}`. Photon → fallback Open-Meteo (città);
+  Nominatim è bloccato dagli IP di Supabase. Nessun secret. verify_jwt=true. Chiamata dal client
+  in `findOrCreateVenue` (`requestVenueGeocode`). Con il deploy via MCP includi anche
+  `../_shared/cors.ts` tra i file.
 
 ## RPC disponibili
 `username_available(name)`, `find_or_create_artist(p_name)`, `find_or_create_venue(p_name,p_city,p_country,p_country_name)`,
