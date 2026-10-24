@@ -45,7 +45,7 @@ dalla Artist Page.
 ## Step 4 — Achievements (screen 21)
 **Design**: `grep "21 — Achievements"`.
 **Cosa**: griglia badge (18/42 stile), unlocked/locked/in-progress con barra, rarità.
-- **DB**: seed del catalogo `achievements` (migrazione, es. `0010_seed_achievements.sql`)
+- **DB**: seed del catalogo `achievements` (migrazione, es. `0011_seed_achievements.sql`)
   con slug/name/description/rarity/criteria(jsonb). `user_achievements` traccia unlock+progress.
 - **Logica unlock**: due approcci —
   (a) calcolo lato client dai dati (semplice, per MVP): deriva quali achievement sono sbloccati

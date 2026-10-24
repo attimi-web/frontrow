@@ -23,10 +23,17 @@ e gli show "attended" di profili pubblici sono leggibili da altri (per i profili
 | 0005 | `0005_grant_role_privileges.sql` | **grant** a anon/authenticated/service_role + default privileges |
 | 0006 | `0006_fix_concerts_read_returning.sql` | `concerts_read` con owner-check inline (fix RETURNING) |
 | 0007 | `0007_dedupe_catalog.sql` | merge duplicati + unique index case-insensitive + RPC `find_or_create_artist`/`find_or_create_venue` |
+| 0008 | `0008_save_festival.sql` | RPC `save_festival(p_concert_id, p_payload jsonb)`: crea/sostituisce la gerarchia festival in modo atomico (SECURITY INVOKER) |
 | 0009 | `0009_storage_concert_photos.sql` | bucket storage `concert-photos` + policy owner-only |
+| 0010 | `0010_social_notifications.sql` | trigger SECURITY DEFINER che scrivono in `notifications`: friend request, friend accepted, buddy tagged, buddy confirmed |
 
-> `0008_save_festival.sql` = RPC `save_festival(p_concert_id, p_payload jsonb)` per creare/sostituire
-> la gerarchia festival in modo atomico (SECURITY INVOKER).
+Prossima migrazione libera: **`0011`**.
+
+> **Nomi nella history del DB ≠ nomi dei file.** `list_migrations` sul progetto dev mostra nomi
+> storici diversi dal repo: `0006_whoami_debug` (funzione di debug, poi rimossa),
+> `0007_fix_concerts_read_returning` (= file `0006_…`), e `social_notifications` (= file `0010_…`,
+> applicata da una sessione sul branch `claude/chat-session-recovery-qobzyb` e recuperata in repo
+> a posteriori). Lo schema reale coincide con i file. Al replay su prod usare i file del repo.
 
 ## Come applicare una NUOVA migrazione
 1. Scrivi il file `supabase/migrations/00NN_descrizione.sql` (numero successivo).
@@ -47,7 +54,8 @@ e gli show "attended" di profili pubblici sono leggibili da altri (per i profili
   direttamente sulla riga.
 - **auth.uid() nelle mutation**: prendi l'id da `supabase.auth.getSession()` al submit.
 - **Notifiche/social cross-user**: inserire una riga per un ALTRO utente (es. notifica) richiede
-  un trigger SECURITY DEFINER o un RPC/edge (service role). Le notifiche sono previste in Sprint 9.
+  un trigger SECURITY DEFINER o un RPC/edge (service role). I trigger social esistono già (`0010`);
+  la UI notifiche è prevista in Sprint 9 (Step 3).
 
 ## Storage
 - Bucket `concert-photos` (pubblico in lettura). Path: `{user_id}/{concert_id}/{uuid}.ext`.

@@ -32,15 +32,18 @@ Prerequisiti: `docs/CONTEXT.md` + `DATABASE.md`. Richiede trigger DB per le noti
 **Design**: `grep "15 — Notifications"`.
 **Cosa**: `/notifications` — lista notifiche (`notifications`): friend tag, richieste amicizia,
 buddy "stesso show", "On This Day". Badge/puntino sulla campanella in Home.
-- **DB (migrazione, es. `0011_notification_triggers.sql`)**: trigger SECURITY DEFINER che
-  inseriscono in `notifications` quando:
-  - viene inserita una riga `concert_buddies` (status pending) → notifica al tagged_user;
-  - viene inserita/aggiornata una `friendships` (pending → richiesta; accepted → notifica al requester).
-  Questo serve perché un utente non può inserire notifiche per un altro (RLS). I trigger sì.
+- **DB — GIÀ FATTO** (`0010_social_notifications.sql`, applicata sul dev): trigger SECURITY DEFINER
+  che inseriscono in `notifications` (type `friend_request`, `friend_accepted`, `buddy_tagged`,
+  `buddy_confirmed`; `data` jsonb con `actor_id` + `friendship_id` o `concert_id`/`buddy_id`).
+  Servono perché un utente non può inserire notifiche per un altro (RLS). Aggiungi una nuova
+  migrazione solo per tipi nuovi (es. "On This Day").
+- Riferimento: il branch `origin/claude/chat-session-recovery-qobzyb` contiene una bozza di
+  `pages/Notifications.tsx` + `useNotifications.ts` (sotto `features/social/`) — da guardare, non
+  da mergiare in blocco (è una versione alternativa dello Sprint 6).
 - Client: `useNotifications` query, mark-as-read (update `read_at`, consentito dalla policy owner),
   realtime opzionale (Supabase channel) per aggiornare in tempo reale.
 - Collega la campanella in `Home` a `/notifications` con conteggio non lette.
-**File**: migrazione trigger; `features/notifications/pages/Notifications.tsx`, api, hook; route;
+**File**: `features/notifications/pages/Notifications.tsx`, api, hook; route;
 wiring campanella Home.
 **Done**: tagga un amico / invia richiesta con un secondo account → compare la notifica; mark read funziona.
 

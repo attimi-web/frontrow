@@ -11,7 +11,7 @@ rivivi ogni concerto e festival. Larghezza di design 390px. Solo dark mode.
 - GitHub: `github.com/TommasoAttimi/frontrow`
 - Branch di lavoro: **`develop`** (→ DB di sviluppo). `main` → produzione (si crea al lancio).
 - Commit: in inglese, in stile `feat:/fix:/design:/chore:`, e termina con:
-  `Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>`
+  `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`
 - Working tree: `/Users/tommaso/WebApps/frontrow` (può variare se la sessione è forkata).
 
 ## Stack
@@ -23,7 +23,7 @@ date-fns · react-simple-maps (per la World Map, da aggiungere). Build: `vite`.
 - Nome: `frontrow` · ref: **`aznauvbcnisndwitunjb`** · region eu-west-1
 - URL: `https://aznauvbcnisndwitunjb.supabase.co`
 - Publishable (anon) key: `sb_publishable_U_gHUcrQEFiaeS6HcZ3uqw_0_V5qLFf` (pubblica, già in `.env.example`)
-- Migrazioni applicate: `0001`–`0009` (vedi `DATABASE.md`)
+- Migrazioni applicate: `0001`–`0010` (vedi `DATABASE.md`)
 - Edge function deployata: `setlist-import` (richiede secret `SETLISTFM_API_KEY`, non ancora impostato)
 - Storage bucket: `concert-photos` (pubblico in lettura, scrittura solo owner)
 

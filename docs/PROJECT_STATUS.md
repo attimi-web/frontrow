@@ -48,6 +48,8 @@ Componente firma: `AvatarTile` (gradiente duotone + stripe + iniziali).
 - **Confirmation modal**: la delete usa `window.confirm` → da sostituire con modal (Sprint 10 / screen 36).
 - **Google OAuth**: da configurare client id/secret in Supabase + redirect URL.
 - **setlist.fm**: import pronto, manca il secret `SETLISTFM_API_KEY`.
+- **Trigger notifiche** (`0010`) già attivi sul DB dev: le righe in `notifications` si accumulano
+  ma la UI arriva con lo Sprint 9.
 - **Dati di test** nel DB dev: account claudetest/friendtest + qualche show. Innocui.
 
 ## Ultimi commit chiave
