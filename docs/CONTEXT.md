@@ -8,7 +8,7 @@ FrontRow: PWA mobile-first (dark mode) per appassionati di concerti — logga, t
 rivivi ogni concerto e festival. Larghezza di design 390px. Solo dark mode.
 
 ## Repo & branch
-- GitHub: `github.com/TommasoAttimi/frontrow`
+- GitHub: `github.com/attimilabs-org/frontrow` (remote `git@github.com:attimilabs-org/frontrow.git`; ex `TommasoAttimi/frontrow`)
 - Branch di lavoro: **`develop`** (→ DB di sviluppo). `main` → produzione (si crea al lancio).
 - Commit: in inglese, in stile `feat:/fix:/design:/chore:`, e termina con:
   `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`
