@@ -23,7 +23,7 @@ date-fns · d3-geo + topojson-client + world-atlas (World Map). Build: `vite`.
 - Nome: `frontrow` · ref: **`aznauvbcnisndwitunjb`** · region eu-west-1
 - URL: `https://aznauvbcnisndwitunjb.supabase.co`
 - Publishable (anon) key: `sb_publishable_U_gHUcrQEFiaeS6HcZ3uqw_0_V5qLFf` (pubblica, già in `.env.example`)
-- Migrazioni applicate: `0001`–`0011` (vedi `DATABASE.md`)
+- Migrazioni applicate: `0001`–`0012` (vedi `DATABASE.md`)
 - Edge function deployate: `setlist-import` (richiede secret `SETLISTFM_API_KEY`, non ancora impostato),
   `geocode-venue` (lat/lng dei venue, nessun secret)
 - Storage bucket: `concert-photos` (pubblico in lettura, scrittura solo owner)
@@ -66,5 +66,6 @@ poi apri `http://localhost:5050/FrontRow.dc.html` (config `design` in `.claude/l
 2. `concerts_read` usa un check owner **inline** (non la funzione STABLE) così
    `insert().select()` funziona in RETURNING (`0006`).
 3. `user_id` nelle mutation si prende da `supabase.auth.getSession()` al submit, non dallo store.
-4. Catalogo artisti/venue: usa gli RPC `find_or_create_artist` / `find_or_create_venue` (`0007`), mai insert diretti.
+4. Catalogo artisti/venue/tour: usa gli RPC `find_or_create_artist` / `find_or_create_venue` (`0007`) /
+   `find_or_create_tour` (`0012`), mai insert diretti.
 5. setlist.fm: chiamate server-side via edge function; la chiave sta nel secret, non nel client.

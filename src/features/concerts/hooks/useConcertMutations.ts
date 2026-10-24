@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
-import { findOrCreateArtist, findOrCreateVenue } from '../api/catalog'
+import { findOrCreateArtist, findOrCreateTour, findOrCreateVenue } from '../api/catalog'
 import {
   createConcert,
   deleteConcert,
@@ -54,6 +54,8 @@ async function buildPayload(values: ConcertFormValues, userId: string) {
   }
 
   const venueId = await resolveVenue(values.venue as VenueRef)
+  const tourName = values.tour_name?.trim()
+  const tourId = tourName ? (await findOrCreateTour(headlinerId, tourName)).id : null
 
   const payload: TablesInsert<'concerts'> = {
     user_id: userId,
@@ -63,7 +65,8 @@ async function buildPayload(values: ConcertFormValues, userId: string) {
     headliner_id: headlinerId,
     venue_id: venueId,
     festival_name: values.type === 'festival' ? values.festival_name || null : null,
-    tour_name: values.tour_name || null,
+    tour_name: tourName || null,
+    tour_id: tourId,
     ticket_type: (values.ticket_type as TicketType) || null,
     ticket_price_paid: values.ticket_price_paid
       ? Number(values.ticket_price_paid)

@@ -259,21 +259,33 @@ function ToursTab({ tours }: { tours: ReturnType<typeof groupShowsByTour> }) {
   }
   return (
     <div className="flex flex-col gap-2">
-      {tours.map((g) => (
-        <div
-          key={g.tour}
-          className="flex items-center gap-3 rounded-xl border border-border bg-white/[0.03] px-4 py-3"
-        >
-          <span className="h-8 w-[3px] flex-none rounded-[2px] bg-orange/60" />
-          <div className="min-w-0 flex-1">
-            <p className="truncate font-body text-sm font-medium text-fg-muted">{g.tour}</p>
-            {g.year && <p className="mt-0.5 font-body text-[11px] text-fg-disabled">{g.year}</p>}
+      {tours.map((g) => {
+        const row = (
+          <>
+            <span className="h-8 w-[3px] flex-none rounded-[2px] bg-orange/60" />
+            <div className="min-w-0 flex-1">
+              <p className="truncate font-body text-sm font-medium text-fg-muted">{g.tour}</p>
+              {g.year && <p className="mt-0.5 font-body text-[11px] text-fg-disabled">{g.year}</p>}
+            </div>
+            <span className="font-display text-sm font-bold text-orange">
+              {g.shows.length}
+            </span>
+          </>
+        )
+        const cls = 'flex items-center gap-3 rounded-xl border border-border bg-white/[0.03] px-4 py-3'
+        return g.tourId ? (
+          <Link key={g.tour} to={`/tour/${g.tourId}`} className={`${cls} transition hover:bg-white/[0.05]`}>
+            {row}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="flex-none text-fg-faint">
+              <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </Link>
+        ) : (
+          <div key={g.tour} className={cls}>
+            {row}
           </div>
-          <span className="font-display text-sm font-bold text-orange">
-            {g.shows.length}
-          </span>
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 }

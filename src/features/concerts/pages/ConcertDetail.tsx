@@ -130,9 +130,20 @@ export function ConcertDetail() {
             {STATUS_LABEL[data.status] ?? data.status}
           </span>
         </div>
-        {data.tour_name && (
-          <p className="mt-1 font-body text-[13px] text-fg-faint">{data.tour_name}</p>
-        )}
+        {data.tour_name &&
+          (data.tour_id ? (
+            <Link
+              to={`/tour/${data.tour_id}`}
+              className="mt-1 inline-flex items-center gap-1 font-body text-[13px] text-fg-faint transition hover:text-orange"
+            >
+              {data.tour_name}
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
+          ) : (
+            <p className="mt-1 font-body text-[13px] text-fg-faint">{data.tour_name}</p>
+          ))}
         <div className="mt-2.5 flex flex-wrap gap-4">
           {data.venue &&
             (data.venue_full?.id ? (

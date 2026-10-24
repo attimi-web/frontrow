@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase'
 import type { ComboboxItem } from '@/components/ui/Combobox'
 import type { Artist, Venue } from '@/types/domain'
+import type { Tables } from '@/types/database'
 
 // ---------- Artists ----------
 export async function searchArtists(query: string): Promise<ComboboxItem[]> {
@@ -71,4 +72,16 @@ export function requestVenueGeocode(venueId: string): void {
       if (error) console.warn('Venue geocoding failed', error)
     })
     .catch((e) => console.warn('Venue geocoding failed', e))
+}
+
+// ---------- Tours ----------
+/** Returns the canonical tour for (artist, name), creating it only if none
+ *  exists (case-insensitive, atomic — see find_or_create_tour RPC, 0012). */
+export async function findOrCreateTour(artistId: string, name: string): Promise<Tables<'tours'>> {
+  const { data, error } = await supabase.rpc('find_or_create_tour', {
+    p_artist_id: artistId,
+    p_name: name,
+  })
+  if (error) throw error
+  return data as Tables<'tours'>
 }

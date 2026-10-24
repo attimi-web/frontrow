@@ -8,11 +8,12 @@ export interface ArtistShow {
   status: 'attended' | 'planned' | 'wishlist'
   festival_name: string | null
   tour_name: string | null
+  tour_id: string | null
   venue: { name: string; city: string; country_name: string } | null
 }
 
 const SHOW_FIELDS =
-  'id, date, type, status, festival_name, tour_name, venue:venues!concerts_venue_id_fkey(name, city, country_name)'
+  'id, date, type, status, festival_name, tour_name, tour_id, venue:venues!concerts_venue_id_fkey(name, city, country_name)'
 
 export async function getArtist(id: string): Promise<Artist> {
   const { data, error } = await supabase
@@ -79,6 +80,8 @@ export async function getConcertsWithSetlist(concertIds: string[]): Promise<Set<
 
 export interface TourGroup {
   tour: string | null
+  /** tours.id when the group's shows are linked to the catalog (0012). */
+  tourId: string | null
   year: string | null
   shows: ArtistShow[]
 }
@@ -99,6 +102,7 @@ export function groupShowsByTour(shows: ArtistShow[]): TourGroup[] {
   return [...groups.entries()]
     .map(([key, groupShows]) => ({
       tour: key === '\u0000' ? null : key,
+      tourId: groupShows.find((s) => s.tour_id)?.tour_id ?? null,
       year: groupShows[0]?.date.slice(0, 4) ?? null,
       shows: groupShows,
     }))

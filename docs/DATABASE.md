@@ -27,8 +27,9 @@ e gli show "attended" di profili pubblici sono leggibili da altri (per i profili
 | 0009 | `0009_storage_concert_photos.sql` | bucket storage `concert-photos` + policy owner-only |
 | 0010 | `0010_social_notifications.sql` | trigger SECURITY DEFINER che scrivono in `notifications`: friend request, friend accepted, buddy tagged, buddy confirmed |
 | 0011 | `0011_app_admins.sql` | tabella `app_admins(user_id)`: RLS senza policy + grant revocati → solo service role |
+| 0012 | `0012_tours_link.sql` | unique `tours(artist_id, lower(name))`, RPC `find_or_create_tour`, RPC `set_tour_total_shows` (SECURITY DEFINER, solo se hai uno show sul tour), backfill `concerts.tour_id` da `tour_name` |
 
-Prossima migrazione libera: **`0012`**.
+Prossima migrazione libera: **`0013`**.
 
 > **Admin**: le righe di `app_admins` si inseriscono a mano per ambiente (gli id utente cambiano):
 > `insert into app_admins (user_id) values ('<auth.users.id>');`. Sul dev l'admin è `tomm`.
@@ -78,4 +79,5 @@ Prossima migrazione libera: **`0012`**.
 
 ## RPC disponibili
 `username_available(name)`, `find_or_create_artist(p_name)`, `find_or_create_venue(p_name,p_city,p_country,p_country_name)`,
-`is_concert_owner(cid)`, `can_read_concert(cid)`, `save_festival(p_concert_id,p_payload)`.
+`is_concert_owner(cid)`, `can_read_concert(cid)`, `save_festival(p_concert_id,p_payload)`,
+`find_or_create_tour(p_artist_id,p_name)`, `set_tour_total_shows(p_tour_id,p_total)`.

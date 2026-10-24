@@ -45,7 +45,7 @@ dalla Artist Page.
 ## Step 4 — Achievements (screen 21)
 **Design**: `grep "21 — Achievements"`.
 **Cosa**: griglia badge (18/42 stile), unlocked/locked/in-progress con barra, rarità.
-- **DB**: seed del catalogo `achievements` (migrazione, es. `0012_seed_achievements.sql`)
+- **DB**: seed del catalogo `achievements` (migrazione, es. `0013_seed_achievements.sql`)
   con slug/name/description/rarity/criteria(jsonb). `user_achievements` traccia unlock+progress.
 - **Logica unlock**: due approcci —
   (a) calcolo lato client dai dati (semplice, per MVP): deriva quali achievement sono sbloccati
@@ -81,6 +81,16 @@ entry point (Profile o Home).
   vero sono le chip anno.
 - Nessun bottone back nel prototipo: aggiunto un chevron a sinistra del titolo per tornare indietro.
 
+### Note Step 3
+- **Date mancate**: non conosciamo il calendario completo del tour (servirebbe setlist.fm, B3),
+  quindi le date non loggate sono una sola riga riassuntiva "N other dates". Chip "Missed" solo
+  se `tours.end_date` è nel passato, altrimenti "Not seen".
+- **total_shows** è condiviso (catalogo): lo imposta chiunque abbia uno show sul tour (tap su
+  "Your completion ✎" per modificarlo). Validato 1–1000.
+- I festival non hanno tour (il form festival non ha `tour_name`).
+- Il tuo show Muse (account `tomm`) è stato collegato al tour "The Wow! Signal Europe Tour 2026"
+  dal backfill; `total_shows` è ancora vuoto.
+
 ## Checklist chiusura sprint
 - [x] Step 1 geocoding venue — edge function `geocode-venue` (deployata, verify_jwt).
       `findOrCreateVenue` (catalog.ts) la invoca fire-and-forget quando il venue non ha
@@ -94,6 +104,13 @@ entry point (Profile o Home).
       tooltip città sul tap (default città top), strip countries/cities/km, Top Countries con
       bandiere e barre. `LIST_SELECT` ora include `venue.country/lat/lng`. Verificato (claudetest):
       London + Sesto San Giovanni, 2 paesi, 948 km, filtro 2026, tap → tooltip. Console pulita.
-- [ ] Step 3 Tour Tracker
+- [x] Step 3 Tour Tracker (screen 22) — `features/tours/{api,hooks,pages/TourTracker.tsx}`, route
+      `/tour/:id`. Migrazione `0012_tours_link` (tour = headliner + nome, `find_or_create_tour`,
+      `set_tour_total_shows`, backfill). Il salvataggio di un concerto con `tour_name` ora
+      collega `concerts.tour_id`. Card con gradiente artista, completion `N / tot`, barra +
+      segmenti (≤40), chip % e "left to see", lista date (visti ✓, planned "Upcoming", riga
+      riassuntiva per le date non loggate). Entry: nome tour nel Concert Detail, tab Tours
+      dell'Artist Page. Verificato (claudetest, tour di test poi rimosso): edit show → tour
+      creato → link → tracker → totale 5 → 1/5 20%; guard RPC su tour altrui. Console pulita.
 - [ ] Step 4 Achievements (+ seed migrazione)
 - [ ] Aggiorna `PROJECT_STATUS.md` (Sprint 8 ✅, schermate 18/21/22)

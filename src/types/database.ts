@@ -787,10 +787,18 @@ export type Database = {
         }
         Returns: Database["public"]["Tables"]["venues"]["Row"]
       }
+      find_or_create_tour: {
+        Args: { p_artist_id: string; p_name: string }
+        Returns: Database["public"]["Tables"]["tours"]["Row"]
+      }
       is_concert_owner: { Args: { cid: string }; Returns: boolean }
       save_festival: {
         Args: { p_concert_id: string | null; p_payload: Json }
         Returns: string
+      }
+      set_tour_total_shows: {
+        Args: { p_tour_id: string; p_total: number }
+        Returns: Database["public"]["Tables"]["tours"]["Row"]
       }
       username_available: { Args: { name: string }; Returns: boolean }
     }
